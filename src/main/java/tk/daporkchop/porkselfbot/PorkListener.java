@@ -12,8 +12,8 @@ public class PorkListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (event.getAuthor().isBot()) {
-            //bots don't matter to us!
+        if (!event.getAuthor().getId().equals(PorkSelfBot.INSTANCE.jda.getSelfUser().getId())) {
+            //only self user execute commands
             return;
         }
         String message = event.getMessage().getRawContent();

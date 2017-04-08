@@ -14,6 +14,8 @@ import tk.daporkchop.porkselfbot.command.base.CommandPing;
 import javax.security.auth.login.LoginException;
 import java.io.*;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -104,9 +106,13 @@ public class PorkSelfBot {
     }
 
     public void start() {
-        jda.getPresence().setStatus(OnlineStatus.IDLE);
-        jda.getPresence().setGame(new GameImpl("PorkSelfBot", "", Game.GameType.DEFAULT));
-        //jda.getPresence().setGame(new GameImpl("Say ..help", "https://www.twitch.tv/daporkchop_", Game.GameType.TWITCH));
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                jda.getPresence().setStatus(OnlineStatus.IDLE);
+                jda.getPresence().setGame(new GameImpl("PorkSelfBot", "", Game.GameType.DEFAULT));
+            }
+        }, 1000, 1000);
 
         CommandRegistry.registerCommand(new CommandPing());
     }
