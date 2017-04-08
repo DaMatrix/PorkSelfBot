@@ -7,10 +7,12 @@ import tk.daporkchop.porkselfbot.command.Command;
 
 import java.awt.*;
 
-public class CommandPing extends Command {
-
-    public CommandPing() {
-        super("ping");
+/**
+ * Created by daporkchop on 4/8/2017.
+ */
+public class CommandEmbed extends Command {
+    public CommandEmbed() {
+        super("embed");
     }
 
     @Override
@@ -26,11 +28,11 @@ public class CommandPing extends Command {
 
     @Override
     public String getUsage() {
-        return ",,ping";
+        return "..embed";
     }
 
     @Override
     public String getUsageExample()	{
-        return ",,ping";
+        return "..embed";
     }
 }

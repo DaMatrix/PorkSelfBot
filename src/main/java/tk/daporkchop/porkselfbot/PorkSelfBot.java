@@ -4,6 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.impl.GameImpl;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
@@ -103,6 +104,8 @@ public class PorkSelfBot {
     }
 
     public void start() {
+        jda.getPresence().setStatus(OnlineStatus.IDLE);
+        jda.getPresence().setGame(new GameImpl("PorkSelfBot", "", Game.GameType.DEFAULT));
         //jda.getPresence().setGame(new GameImpl("Say ..help", "https://www.twitch.tv/daporkchop_", Game.GameType.TWITCH));
 
         CommandRegistry.registerCommand(new CommandPing());
