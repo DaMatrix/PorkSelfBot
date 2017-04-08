@@ -113,7 +113,7 @@ public class PorkSelfBot {
                 jda.getPresence().setStatus(OnlineStatus.IDLE);
                 jda.getPresence().setGame(new GameImpl("PorkSelfBot", "", Game.GameType.DEFAULT));
             }
-        }, 1000, 1000);
+        }, 1000, 15000);
 
         CommandRegistry.registerCommand(new CommandPing());
         CommandRegistry.registerCommand(new CommandReboot());
