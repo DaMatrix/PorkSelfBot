@@ -38,7 +38,7 @@ public class PorkSelfBot {
     public PorkSelfBot()    {
         logger.info("Starting PorkSelfBot...");
         try {
-            jda = new JDABuilder(AccountType.BOT)
+            jda = new JDABuilder(AccountType.CLIENT)
                     .setToken(getToken())
                     .addListener(new PorkListener())
                     .buildBlocking();
@@ -103,7 +103,7 @@ public class PorkSelfBot {
     }
 
     public void start() {
-        jda.getPresence().setGame(new GameImpl("Say ..help", "https://www.twitch.tv/daporkchop_", Game.GameType.TWITCH));
+        //jda.getPresence().setGame(new GameImpl("Say ..help", "https://www.twitch.tv/daporkchop_", Game.GameType.TWITCH));
 
         CommandRegistry.registerCommand(new CommandPing());
     }
