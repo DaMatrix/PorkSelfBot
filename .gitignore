@@ -1,0 +1,15 @@
+
+\.idea/
+
+*.iml
+
+discordtoken\.txt
+authtoken\.txt
+
+porkbot-1\.0-SNAPSHOT\.jar
+
+.settings
+.classpath
+.project
+
+target/
