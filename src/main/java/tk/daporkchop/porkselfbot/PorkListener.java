@@ -20,15 +20,6 @@ public class PorkListener extends ListenerAdapter {
 
         if (message.startsWith(",,"))    {
             CommandRegistry.runCommand(event, message);
-        } else if (event.getChannelType().ordinal() == ChannelType.PRIVATE.ordinal()) {
-            if (event.getAuthor().getId().equals("226975061880471552"))   {
-                switch (message)    {
-                    case ",,instareboot":
-                        PorkSelfBot.INSTANCE.jda.shutdown();
-                        System.exit(0);
-                        break;
-                }
-            }
         }
     }
 }

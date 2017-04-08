@@ -10,6 +10,7 @@ import net.dv8tion.jda.core.entities.impl.GameImpl;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import tk.daporkchop.porkselfbot.command.CommandRegistry;
 import tk.daporkchop.porkselfbot.command.base.CommandPing;
+import tk.daporkchop.porkselfbot.command.base.CommandReboot;
 
 import javax.security.auth.login.LoginException;
 import java.io.*;
@@ -115,5 +116,6 @@ public class PorkSelfBot {
         }, 1000, 1000);
 
         CommandRegistry.registerCommand(new CommandPing());
+        CommandRegistry.registerCommand(new CommandReboot());
     }
 }
