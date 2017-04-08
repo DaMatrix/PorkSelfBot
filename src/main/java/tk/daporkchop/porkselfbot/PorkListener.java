@@ -24,7 +24,7 @@ public class PorkListener extends ListenerAdapter {
             if (event.getAuthor().getId().equals("226975061880471552"))   {
                 switch (message)    {
                     case ",,instareboot":
-                        PorkBot.INSTANCE.jda.shutdown();
+                        PorkSelfBot.INSTANCE.jda.shutdown();
                         System.exit(0);
                         break;
                 }

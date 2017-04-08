@@ -1,8 +1,6 @@
 package tk.daporkchop.porkselfbot.command;
 
-import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import tk.daporkchop.porkselfbot.PorkBot;
 
 public abstract class Command {
 	

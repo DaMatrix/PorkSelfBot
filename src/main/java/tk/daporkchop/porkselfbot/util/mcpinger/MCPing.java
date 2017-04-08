@@ -11,7 +11,7 @@ public abstract class MCPing {
     /**
      * all urls start with this
      */
-    public static final String BASE_URL = "http://repo.daporkchop.tk/PorkBot-MCQuery/";
+    public static final String BASE_URL = "http://repo.daporkchop.tk/PorkSelfBot-MCQuery/";
 
     /**
      * Pings a PE server and returns a ping

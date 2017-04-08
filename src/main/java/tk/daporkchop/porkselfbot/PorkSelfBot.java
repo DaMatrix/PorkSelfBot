@@ -20,9 +20,9 @@ import java.util.logging.Logger;
 /**
  * Created by daporkchop on 05.03.17.
  */
-public class PorkBot {
+public class PorkSelfBot {
 
-    public static PorkBot INSTANCE;
+    public static PorkSelfBot INSTANCE;
     public static Logger logger;
 
     public JDA jda;
@@ -35,7 +35,7 @@ public class PorkBot {
             .expireAfterWrite(30, TimeUnit.MINUTES)
             .build().asMap();
 
-    public PorkBot()    {
+    public PorkSelfBot()    {
         logger.info("Starting PorkSelfBot...");
         try {
             jda = new JDABuilder(AccountType.BOT)
@@ -55,8 +55,8 @@ public class PorkBot {
     }
 
     public static void main(String[] args)  {
-        logger = Logger.getLogger("PorkBot");
-        INSTANCE = new PorkBot();
+        logger = Logger.getLogger("PorkSelfBot");
+        INSTANCE = new PorkSelfBot();
         INSTANCE.start();
     }
 
