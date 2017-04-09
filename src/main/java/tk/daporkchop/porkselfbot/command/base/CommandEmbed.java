@@ -1,9 +1,13 @@
 package tk.daporkchop.porkselfbot.command.base;
 
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.PermissionException;
+import org.yaml.snakeyaml.Yaml;
 import tk.daporkchop.porkselfbot.PorkSelfBot;
 import tk.daporkchop.porkselfbot.command.Command;
+import tk.daporkchop.porkselfbot.util.YMLParser;
 
 import java.awt.*;
 
@@ -17,13 +21,20 @@ public class CommandEmbed extends Command {
 
     @Override
     public void excecute(MessageReceivedEvent evt, String[] args, String message) {
-        EmbedBuilder builder = new EmbedBuilder();
-        builder.setColor(Color.BLUE);
-        builder.setTitle("PorkSelfBot ping...", "http://www.daporkchop.tk/");
+        try {
+            EmbedBuilder builder = new EmbedBuilder();
 
-        builder.addField("**Ping:**", PorkSelfBot.INSTANCE.jda.getPing() + "ms", false);
+            YMLParser yml = new YMLParser();
+            yml.loadRaw(message.substring(8));
 
-        evt.getMessage().editMessage(builder.build()).queue();
+            builder.setTitle(yml.get("title.text", "error"), yml.get("title.url", "http://google.com"));
+
+            evt.getMessage().editMessage(builder.build()).queue();
+        } catch (PermissionException e) {
+            if (e.getPermission().ordinal() == Permission.MESSAGE_EMBED_LINKS.ordinal())    {
+                evt.getMessage().editMessage("*Missing permission to send embeds!*").queue();
+            }
+        }
     }
 
     @Override

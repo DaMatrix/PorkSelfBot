@@ -107,13 +107,8 @@ public class PorkSelfBot {
     }
 
     public void start() {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                jda.getPresence().setStatus(OnlineStatus.IDLE);
-                jda.getPresence().setGame(new GameImpl("PorkSelfBot", "", Game.GameType.DEFAULT));
-            }
-        }, 1000, 15000);
+        jda.getPresence().setStatus(OnlineStatus.IDLE);
+        jda.getPresence().setGame(new GameImpl("PorkSelfBot", "", Game.GameType.DEFAULT));
 
         CommandRegistry.registerCommand(new CommandPing());
         CommandRegistry.registerCommand(new CommandReboot());

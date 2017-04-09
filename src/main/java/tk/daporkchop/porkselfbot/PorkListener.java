@@ -12,8 +12,13 @@ public class PorkListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (!event.getAuthor().getId().equals(PorkSelfBot.INSTANCE.jda.getSelfUser().getId())) {
-            //only self user execute commands
+        try {
+            if (!event.getAuthor().getId().equals(PorkSelfBot.INSTANCE.jda.getSelfUser().getId())) {
+                //only self user execute commands
+                return;
+            }
+        } catch (NullPointerException e)    {
+            //bot isn't fully initialized, ignore
             return;
         }
         String message = event.getMessage().getRawContent();
