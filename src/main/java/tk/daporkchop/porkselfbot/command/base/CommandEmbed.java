@@ -61,6 +61,19 @@ public class CommandEmbed extends Command {
                 builder.setColor(nameToColor.getOrDefault(colorName, Color.GRAY));
             }
 
+            int fieldCount = yml.getInt("fieldCount", 0);
+            for (int i = 0; i < fieldCount; i++)     {
+                String name = yml.get(i + ".name", "");
+                String text = yml.get(i + ".text", "");
+                boolean inline = yml.getBoolean(i + ".inline", false);
+
+                builder.addField(name, text, inline);
+            }
+
+            if (yml.getBoolean("showCode", false))  {
+                builder.addField("Code:", "```\n" + message + "\n```", false);
+            }
+
             String thumbnail = yml.get("thumbnail", null);
             if (thumbnail != null)  {
                 builder.setThumbnail(thumbnail);
@@ -69,15 +82,6 @@ public class CommandEmbed extends Command {
             String image = yml.get("image", null);
             if (image != null)  {
                 builder.setImage(image);
-            }
-
-            int fieldCount = yml.getInt("fieldCount", 0);
-            for (int i = 0; i < fieldCount; i++)     {
-                String name = yml.get(i + ".name", "");
-                String text = yml.get(i + ".text", "");
-                boolean inline = yml.getBoolean(i + ".inline", false);
-
-                builder.addField(name, text, inline);
             }
 
             evt.getMessage().editMessage(builder.build()).queue();
