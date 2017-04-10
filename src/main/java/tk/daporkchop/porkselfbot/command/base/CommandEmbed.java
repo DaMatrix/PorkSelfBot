@@ -4,17 +4,36 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
-import org.yaml.snakeyaml.Yaml;
-import tk.daporkchop.porkselfbot.PorkSelfBot;
 import tk.daporkchop.porkselfbot.command.Command;
 import tk.daporkchop.porkselfbot.util.YMLParser;
 
 import java.awt.*;
+import java.util.HashMap;
 
 /**
  * Created by daporkchop on 4/8/2017.
  */
 public class CommandEmbed extends Command {
+
+    public static final HashMap<String, Color> nameToColor = new HashMap<>();
+
+    static {
+        nameToColor.put("white", Color.WHITE);
+        nameToColor.put("lightgray", Color.LIGHT_GRAY);
+        nameToColor.put("gray", Color.GRAY);
+        nameToColor.put("darkgray", Color.DARK_GRAY);
+        nameToColor.put("black", Color.BLACK);
+        nameToColor.put("white", Color.WHITE);
+        nameToColor.put("red", Color.RED);
+        nameToColor.put("pink", Color.PINK);
+        nameToColor.put("orange", Color.ORANGE);
+        nameToColor.put("yellow", Color.YELLOW);
+        nameToColor.put("green", Color.GREEN);
+        nameToColor.put("magenta", Color.MAGENTA);
+        nameToColor.put("cyan", Color.CYAN);
+        nameToColor.put("blue", Color.BLUE);
+    }
+
     public CommandEmbed() {
         super("embed");
     }
@@ -27,7 +46,39 @@ public class CommandEmbed extends Command {
             YMLParser yml = new YMLParser();
             yml.loadRaw(message.substring(8));
 
-            builder.setTitle(yml.get("title.text", "error"), yml.get("title.url", "http://google.com"));
+            String titleText = yml.get("title.text", null);
+            String titleURL = yml.get("title.url", null);
+            String titleIcon = yml.get("title.icon", null);
+            builder.setAuthor(titleText, titleURL, titleIcon);
+
+            String colorName = yml.get("color.name", "gray");
+            if (colorName.equals("custom")) {
+                int r = yml.getInt("color.r", 0);
+                int g = yml.getInt("color.g", 0);
+                int b = yml.getInt("color.b", 0);
+                builder.setColor(new Color(r, g, b));
+            } else {
+                builder.setColor(nameToColor.getOrDefault(colorName, Color.GRAY));
+            }
+
+            String thumbnail = yml.get("thumbnail", null);
+            if (thumbnail != null)  {
+                builder.setThumbnail(thumbnail);
+            }
+
+            String image = yml.get("image", null);
+            if (image != null)  {
+                builder.setImage(image);
+            }
+
+            int fieldCount = yml.getInt("fieldCount", 0);
+            for (int i = 0; i < fieldCount; i++)     {
+                String name = yml.get(i + ".name", "");
+                String text = yml.get(i + ".text", "");
+                boolean inline = yml.getBoolean(i + ".inline", false);
+
+                builder.addField(name, text, inline);
+            }
 
             evt.getMessage().editMessage(builder.build()).queue();
         } catch (PermissionException e) {
@@ -39,11 +90,11 @@ public class CommandEmbed extends Command {
 
     @Override
     public String getUsage() {
-        return "..embed";
+        return ",,embed";
     }
 
     @Override
     public String getUsageExample()	{
-        return "..embed";
+        return ",,embed";
     }
 }

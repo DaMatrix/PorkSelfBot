@@ -21,6 +21,7 @@ public class PorkListener extends ListenerAdapter {
             //bot isn't fully initialized, ignore
             return;
         }
+
         String message = event.getMessage().getRawContent();
 
         if (message.startsWith(",,"))    {

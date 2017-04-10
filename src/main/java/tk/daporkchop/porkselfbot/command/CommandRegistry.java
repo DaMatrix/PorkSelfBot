@@ -22,7 +22,7 @@ public abstract class CommandRegistry {
 	}
 	
 	/**
-	 * Runs a comamnd
+	 * Runs a command
 	 * @param evt
 	 */
 	public static void runCommand(MessageReceivedEvent evt, String rawContent)	{
@@ -30,8 +30,6 @@ public abstract class CommandRegistry {
 			String[] split = rawContent.split(" ");
 			Command cmd = COMMANDS.getOrDefault(split[0].substring(2), null);
 			if (cmd != null)	{
-				evt.getTextChannel().sendTyping().queue();
-
 				new Thread() {
 					@Override
 					public void run()	{

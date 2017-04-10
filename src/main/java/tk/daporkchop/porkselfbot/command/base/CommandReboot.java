@@ -6,9 +6,6 @@ import tk.daporkchop.porkselfbot.command.Command;
 
 import java.awt.*;
 
-/**
- * Created by joeyr on 4/8/2017.
- */
 public class CommandReboot extends Command {
     public CommandReboot()  {
         super("reboot");
@@ -17,6 +14,11 @@ public class CommandReboot extends Command {
     @Override
     public void excecute(MessageReceivedEvent evt, String[] args, String message) {
         evt.getMessage().editMessage("PorkSelfBot rebooting...").queue();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e)    {
+            //shut up java
+        }
         PorkSelfBot.INSTANCE.jda.shutdown();
         System.exit(0);
     }
