@@ -63,15 +63,17 @@ public class CommandEmbed extends Command {
 
             int fieldCount = yml.getInt("fieldCount", 0);
             for (int i = 0; i < fieldCount; i++)     {
-                String name = yml.getString(String.valueOf(i) + ".name", "");
-                String text = yml.getString(String.valueOf(i) + ".text", "");
-                boolean inline = yml.getBoolean(String.valueOf(i) + ".inline", false);
+                String name = yml.getString("field" + i + ".name", "");
+                String text = yml.getString("field" + i + ".text", "");
+                boolean inline = yml.getBoolean("field" + i + ".inline", false);
+
+                System.out.println(name + " " + text + " " + inline);
 
                 builder.addField(name, text, inline);
             }
 
-            if (yml.getBoolean("showCode", false))  {
-                builder.addField("Code:", "```\n" + message + "\n```", false);
+            if (yml.getBoolean("showYml", false))  {
+                builder.addField("YML:", "```\n" + message.substring(0) + "\n```", false);
             }
 
             String thumbnail = yml.get("thumbnail", null);
