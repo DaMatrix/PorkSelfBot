@@ -73,7 +73,7 @@ public class CommandEmbed extends Command {
             }
 
             if (yml.getBoolean("showYml", false))  {
-                builder.addField("YML:", "```\n" + message.substring(0) + "\n```", false);
+                builder.addField("YML:", "```\n" + message.substring(8) + "\n```", false);
             }
 
             String thumbnail = yml.get("thumbnail", null);
