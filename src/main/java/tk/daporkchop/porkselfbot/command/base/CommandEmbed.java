@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
+import org.yaml.snakeyaml.error.YAMLException;
 import tk.daporkchop.porkselfbot.command.Command;
 import tk.daporkchop.porkselfbot.util.YMLParser;
 
@@ -89,6 +90,8 @@ public class CommandEmbed extends Command {
             if (e.getPermission().ordinal() == Permission.MESSAGE_EMBED_LINKS.ordinal())    {
                 evt.getMessage().editMessage("*Missing permission to send embeds!*").queue();
             }
+        } catch (YAMLException e)   {
+            evt.getMessage().editMessage("Bad YML formatting!").queue();
         }
     }
 

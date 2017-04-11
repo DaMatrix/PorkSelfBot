@@ -2,6 +2,7 @@ package tk.daporkchop.porkselfbot.command.base;
 
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.yaml.snakeyaml.error.YAMLException;
 import tk.daporkchop.porkselfbot.PorkSelfBot;
 import tk.daporkchop.porkselfbot.command.Command;
 import tk.daporkchop.porkselfbot.util.YMLParser;
@@ -27,17 +28,21 @@ public class CommandSetStatus extends Command {
 
     @Override
     public void excecute(MessageReceivedEvent evt, String[] args, String message) {
-        YMLParser yml = new YMLParser();
-        yml.loadRaw(message.substring(12));
+        try {
+            YMLParser yml = new YMLParser();
+            yml.loadRaw(message.substring(12));
 
-        String statusName = yml.get("status", "asdf");
-        OnlineStatus status = nameToStatus.getOrDefault(statusName, null);
+            String statusName = yml.get("status", "asdf");
+            OnlineStatus status = nameToStatus.getOrDefault(statusName, null);
 
-        if (status == null) {
-            evt.getMessage().editMessage("Unknown status! Valid values are:\n```\nonline\nidle\ndnd\ndonotdisturb\ninvisible\noffline\n```").queue();
-        } else {
-            PorkSelfBot.INSTANCE.jda.getPresence().setStatus(status);
-            evt.getMessage().editMessage("Set status to: `" + status.getKey() + "`").queue();
+            if (status == null) {
+                evt.getMessage().editMessage("Unknown status! Valid values are:\n```\nonline\nidle\ndnd\ndonotdisturb\ninvisible\noffline\n```").queue();
+            } else {
+                PorkSelfBot.INSTANCE.jda.getPresence().setStatus(status);
+                evt.getMessage().editMessage("Set status to: `" + status.getKey() + "`").queue();
+            }
+        } catch (YAMLException e)   {
+            evt.getMessage().editMessage("Bad YML formatting!").queue();
         }
     }
 
