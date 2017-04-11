@@ -67,8 +67,6 @@ public class CommandEmbed extends Command {
                 String text = yml.getString("field" + i + ".text", "");
                 boolean inline = yml.getBoolean("field" + i + ".inline", false);
 
-                System.out.println(name + " " + text + " " + inline);
-
                 builder.addField(name, text, inline);
             }
 
