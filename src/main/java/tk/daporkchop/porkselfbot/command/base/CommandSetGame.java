@@ -19,9 +19,9 @@ public class CommandSetGame extends Command {
             YMLParser yml = new YMLParser();
             yml.loadRaw(message.substring(10));
 
-            String name = yml.get("name", "PorkSelfBot");
-            String url = yml.get("url", "");
-            boolean isStream = yml.getBoolean("stream", false);
+            String name = yml.get("name", PorkSelfBot.INSTANCE.jda.getPresence().getGame().getName());
+            String url = yml.get("url", PorkSelfBot.INSTANCE.jda.getPresence().getGame().getUrl());
+            boolean isStream = yml.getBoolean("stream", PorkSelfBot.INSTANCE.jda.getPresence().getGame().getType() == Game.GameType.TWITCH);
             Game.GameType type = isStream ? Game.GameType.TWITCH : Game.GameType.DEFAULT;
 
             PorkSelfBot.INSTANCE.jda.getPresence().setGame(new GameImpl(name, url, type));
