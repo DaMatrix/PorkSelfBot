@@ -14,7 +14,7 @@ public class CommandSave extends Command {
     static {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.RED);
-        builder.setTitle("Saved config!", "");
+        builder.setTitle("Saved config!", null);
         message = builder;
     }
     public CommandSave() {

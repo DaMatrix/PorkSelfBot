@@ -14,7 +14,7 @@ public class CommandEnableSpammer extends Command {
     static {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.RED);
-        builder.setTitle("Toggled spammer!", "");
+        builder.setTitle("Toggled spammer!", null);
         message = builder;
     }
 
