@@ -13,13 +13,14 @@ public class CommandEnableSpammer extends Command {
 
     @Override
     public void excecute(MessageReceivedEvent evt, String[] args, String message) {
-        List<String> temp = PorkSelfBot.INSTANCE.config.getStringList("spamchannels");
+        List<String> temp = PorkSelfBot.INSTANCE.spamChannels;
         if (temp.contains(evt.getChannel().getId())) {
             temp.remove(evt.getChannel().getId());
         } else {
             temp.add(evt.getChannel().getId());
         }
         PorkSelfBot.INSTANCE.config.set("spamchannels", temp);
+        PorkSelfBot.INSTANCE.spamChannels = temp;
         evt.getMessage().editMessage("Toggled spammer").queue();
     }
 
