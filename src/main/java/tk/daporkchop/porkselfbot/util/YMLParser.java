@@ -855,7 +855,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      */
     public String getString(String key, String defaultValue) {
         Object result = this.get(key, defaultValue);
-        if (result.equals(defaultValue)) {
+        if (result == null || result.equals(defaultValue)) {
             this.set(key, defaultValue);
         }
         return String.valueOf(result);
@@ -927,7 +927,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      */
     public List getList(String key, List defaultList) {
         List toReturn = this.get(key, defaultList);
-        if (toReturn.equals(defaultList)) {
+        if (toReturn == null || toReturn.equals(defaultList)) {
             this.set(key, toReturn);
         }
         return toReturn;
