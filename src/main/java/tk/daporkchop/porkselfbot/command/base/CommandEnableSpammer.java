@@ -1,12 +1,23 @@
 package tk.daporkchop.porkselfbot.command.base;
 
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import tk.daporkchop.porkselfbot.PorkSelfBot;
 import tk.daporkchop.porkselfbot.command.Command;
 
+import java.awt.*;
 import java.util.List;
 
 public class CommandEnableSpammer extends Command {
+    public static final EmbedBuilder message;
+
+    static {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.RED);
+        builder.setTitle("Toggled spammer!", "");
+        message = builder;
+    }
+
     public CommandEnableSpammer() {
         super("spam");
     }
@@ -21,7 +32,7 @@ public class CommandEnableSpammer extends Command {
         }
         PorkSelfBot.INSTANCE.config.set("spamchannels", temp);
         PorkSelfBot.INSTANCE.spamChannels = temp;
-        evt.getMessage().editMessage("Toggled spammer").queue();
+        evt.getMessage().editMessage(CommandEnableSpammer.message.build()).queue();
     }
 
     @Override
