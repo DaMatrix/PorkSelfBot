@@ -13,3 +13,5 @@ porkbot-1\.0-SNAPSHOT\.jar
 .project
 
 target/
+
+*.yml

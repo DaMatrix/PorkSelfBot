@@ -26,6 +26,10 @@ public class CommandSetGame extends Command {
 
             PorkSelfBot.INSTANCE.jda.getPresence().setGame(new GameImpl(name, url, type));
 
+            PorkSelfBot.INSTANCE.config.set("game.name", name);
+            PorkSelfBot.INSTANCE.config.set("game.url", url);
+            PorkSelfBot.INSTANCE.config.set("game.stream", isStream);
+
             evt.getMessage().editMessage("**Changed game to:**\nName: " + name + (url != null && !url.isEmpty() ? "\nURL: " + url : "") + "\nType: " + (isStream ? "TWITCH" : "DEFAULT")).queue();
         } catch (YAMLException e)   {
             evt.getMessage().editMessage("Bad YML formatting!").queue();

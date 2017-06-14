@@ -6,16 +6,19 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.impl.GameImpl;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import tk.daporkchop.porkselfbot.command.CommandRegistry;
 import tk.daporkchop.porkselfbot.command.base.*;
+import tk.daporkchop.porkselfbot.util.YMLParser;
 
 import javax.security.auth.login.LoginException;
-import java.io.*;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -28,7 +31,9 @@ public class PorkSelfBot {
     public static PorkSelfBot INSTANCE;
     public static Logger logger;
 
+    public YMLParser config;
     public JDA jda;
+    public List<String> spamChannels;
 
     /**
      * The bot's main cache!
@@ -106,8 +111,11 @@ public class PorkSelfBot {
     }
 
     public void start() {
+        config = new YMLParser("config.yml", YMLParser.YAML);
+        spamChannels = config.getStringList("spamchannels");
+
         jda.getPresence().setStatus(OnlineStatus.IDLE);
-        jda.getPresence().setGame(new GameImpl("PorkSelfBot", "", Game.GameType.DEFAULT));
+        jda.getPresence().setGame(new GameImpl(config.getString("game.name", "PorkSelfBot"), config.getString("game.url", ""), config.getBoolean("game.stream", false) ? Game.GameType.TWITCH : Game.GameType.DEFAULT));
 
         CommandRegistry.registerCommand(new CommandPing());
         CommandRegistry.registerCommand(new CommandReboot());
@@ -116,5 +124,17 @@ public class PorkSelfBot {
         CommandRegistry.registerCommand(new CommandSetStatus());
         CommandRegistry.registerCommand(new CommandGET());
         CommandRegistry.registerCommand(new CommandPOST());
+        CommandRegistry.registerCommand(new CommandSave());
+        CommandRegistry.registerCommand(new CommandEnableSpammer());
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                for (String channelID : spamChannels) {
+                    TextChannel channel = jda.getTextChannelById(channelID);
+                    channel.sendMessage(UUID.randomUUID().toString()).queue();
+                }
+            }
+        }, 0, 60000);
     }
 }

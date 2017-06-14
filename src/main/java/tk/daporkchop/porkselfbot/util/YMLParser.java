@@ -24,14 +24,6 @@ public class YMLParser {
     //public static final int SERIALIZED = 4; // .sl
     public static final int ENUM = 5; // .txt, .list, .enum
     public static final int ENUMERATION = YMLParser.ENUM;
-
-    //private LinkedHashMap<String, Object> config = new LinkedHashMap<>();
-    private ConfigSection config = new ConfigSection();
-    private final Map<String, Object> nestedCache = new HashMap<>();
-    private File file;
-    private boolean correct = false;
-    private int type = YMLParser.DETECT;
-
     public static final Map<String, Integer> format = new TreeMap<>();
 
     static {
@@ -49,6 +41,13 @@ public class YMLParser {
         format.put("list", YMLParser.ENUM);
         format.put("enum", YMLParser.ENUM);
     }
+
+    private final Map<String, Object> nestedCache = new HashMap<>();
+    //private LinkedHashMap<String, Object> config = new LinkedHashMap<>();
+    private ConfigSection config = new ConfigSection();
+    private File file;
+    private boolean correct = false;
+    private int type = YMLParser.DETECT;
 
     /**
      * Constructor for Config instance with undefined file object
@@ -387,10 +386,6 @@ public class YMLParser {
         this.config = new ConfigSection(map);
     }
 
-    public void setAll(ConfigSection section) {
-        this.config = section;
-    }
-
     public boolean exists(String key) {
         return config.exists(key);
     }
@@ -405,6 +400,10 @@ public class YMLParser {
 
     public Map<String, Object> getAll() {
         return this.config.getAllMap();
+    }
+
+    public void setAll(ConfigSection section) {
+        this.config = section;
     }
 
     /**
@@ -637,7 +636,9 @@ class ConfigSection extends LinkedHashMap<String, Object> {
         if (key == null || key.isEmpty()) return defaultValue;
         if (super.containsKey(key)) return (T) super.get(key);
         String[] keys = key.split("\\.", 2);
-        if (!super.containsKey(keys[0])) return defaultValue;
+        if (!super.containsKey(keys[0])) {
+            return defaultValue;
+        }
         Object value = super.get(keys[0]);
         if (value != null && value instanceof ConfigSection) {
             ConfigSection section = (ConfigSection) value;
@@ -745,7 +746,11 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public int getInt(String key, int defaultValue) {
-        return this.get(key, ((Number) defaultValue)).intValue();
+        int toReturn = this.get(key, ((Number) defaultValue)).intValue();
+        if (toReturn == defaultValue) {
+            this.set(key, toReturn);
+        }
+        return toReturn;
     }
 
     /**
@@ -777,7 +782,11 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public long getLong(String key, long defaultValue) {
-        return this.get(key, ((Number) defaultValue)).longValue();
+        long toReturn = this.get(key, ((Number) defaultValue)).longValue();
+        if (toReturn == defaultValue) {
+            this.set(key, toReturn);
+        }
+        return toReturn;
     }
 
     /**
@@ -809,7 +818,11 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public double getDouble(String key, double defaultValue) {
-        return this.get(key, ((Number) defaultValue)).doubleValue();
+        double toReturn = this.get(key, ((Number) defaultValue)).doubleValue();
+        if (toReturn == defaultValue) {
+            this.set(key, toReturn);
+        }
+        return toReturn;
     }
 
     /**
@@ -842,6 +855,9 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      */
     public String getString(String key, String defaultValue) {
         Object result = this.get(key, defaultValue);
+        if (result.equals(defaultValue)) {
+            this.set(key, defaultValue);
+        }
         return String.valueOf(result);
     }
 
@@ -874,7 +890,11 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public boolean getBoolean(String key, boolean defaultValue) {
-        return this.get(key, defaultValue);
+        boolean toReturn = this.get(key, defaultValue);
+        if (toReturn == defaultValue) {
+            this.set(key, toReturn);
+        }
+        return toReturn;
     }
 
     /**
@@ -906,7 +926,11 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List getList(String key, List defaultList) {
-        return this.get(key, defaultList);
+        List toReturn = this.get(key, defaultList);
+        if (toReturn.equals(defaultList)) {
+            this.set(key, toReturn);
+        }
+        return toReturn;
     }
 
     /**
