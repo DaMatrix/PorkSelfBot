@@ -34,7 +34,7 @@ public class CommandGenInvite extends Command {
         } else {
             SimpleLog.LEVEL = SimpleLog.Level.TRACE;
             Invite invite = guild.getDefaultChannel().createInvite().setMaxUses(1).setTemporary(false).complete();
-            evt.getMessage().editMessage("Created invite for guild: " + invite.getURL());
+            evt.getMessage().editMessage("Created invite for guild: " + invite.getURL()).queue();
             SimpleLog.LEVEL = SimpleLog.Level.INFO;
         }
     }
