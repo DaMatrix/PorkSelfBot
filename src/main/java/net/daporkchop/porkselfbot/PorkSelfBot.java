@@ -135,6 +135,7 @@ public class PorkSelfBot {
         CommandRegistry.registerCommand(new CommandPOST());
         CommandRegistry.registerCommand(new CommandSave());
         CommandRegistry.registerCommand(new CommandEnableSpammer());
+        CommandRegistry.registerCommand(new CommandGenInvite());
 
         new Timer().schedule(new TimerTask() {
             @Override
