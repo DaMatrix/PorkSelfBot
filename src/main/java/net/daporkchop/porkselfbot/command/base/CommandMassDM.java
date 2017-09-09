@@ -29,9 +29,9 @@ public class CommandMassDM extends Command {
     @Override
     public void excecute(MessageReceivedEvent evt, String[] args, String message) {
         YMLParser yml = new YMLParser();
-        yml.loadRaw(message.substring(7));
+        yml.loadRaw(message.substring(9));
         String toSend = yml.getString("msg", null);
-        if (toSend == null) {
+        if (toSend == null || toSend.equals("null")) {
             evt.getMessage().editMessage("No message!").queue();
             return;
         }
