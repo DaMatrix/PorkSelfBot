@@ -58,8 +58,12 @@ public class CommandMassDM extends Command {
         }
         evt.getMessage().editMessage("Sending message to " + users.size() + " users...").complete();
         for (User user : users) {
-            PrivateChannel channel = user.openPrivateChannel().complete();
-            channel.sendMessage(toSend).complete();
+            try {
+                PrivateChannel channel = user.openPrivateChannel().complete();
+                channel.sendMessage(toSend).complete();
+            } catch (UnsupportedOperationException e) {
+                //xd
+            }
         }
         evt.getMessage().editMessage("Sent to " + users.size() + " users!").queue();
     }
