@@ -7,43 +7,38 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tk.daporkchop.porkselfbot.command.base;
+package net.daporkchop.porkselfbot.command;
 
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import tk.daporkchop.porkselfbot.PorkSelfBot;
-import tk.daporkchop.porkselfbot.command.Command;
 
-import java.awt.*;
+public abstract class Command {
+	
+	public String prefix;
+	
+	public Command(String prefix)	{
+		this.prefix = prefix;
+	}
+	
+	/**
+	 * Does command logic!
+	 * @param evt 
+	 * 		The MessageReceivedEvent to be parsed
+	 */
+	public abstract void excecute(MessageReceivedEvent evt, String[] split, String rawContent);
 
-public class CommandSave extends Command {
+    /**
+     * Gets the command's usage
+     * @return
+     */
+	public abstract String getUsage();
 
-    public static final EmbedBuilder message;
+	/**
+	 * Gets and example of using the command
+	 * @return
+	 */
+	public abstract String getUsageExample();
 
-    static {
-        EmbedBuilder builder = new EmbedBuilder();
-        builder.setColor(Color.RED);
-        builder.setTitle("Saved config!", null);
-        message = builder;
-    }
-    public CommandSave() {
-        super("save");
-    }
-
-    @Override
-    public void excecute(MessageReceivedEvent evt, String[] args, String message) {
-        PorkSelfBot.INSTANCE.config.set("spamchannels", PorkSelfBot.INSTANCE.spamChannels);
-        PorkSelfBot.INSTANCE.config.save();
-        evt.getMessage().editMessage(CommandSave.message.build()).queue();
-    }
-
-    @Override
-    public String getUsage() {
-        return ",,save";
-    }
-
-    @Override
-    public String getUsageExample() {
-        return ",,save";
-    }
+	public void sendErrorMessage(MessageReceivedEvent evt, String message)	{
+		evt.getMessage().editMessage((message == null ? "" : message + "\n") + "Usage: `" + getUsage() + "`\nExample: `" + getUsageExample() + "`").queue();
+	}
 }

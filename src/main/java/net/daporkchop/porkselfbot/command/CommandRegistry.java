@@ -7,34 +7,48 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tk.daporkchop.porkselfbot;
+package net.daporkchop.porkselfbot.command;
 
-import net.dv8tion.jda.core.entities.ChannelType;
+import java.util.HashMap;
+
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import tk.daporkchop.porkselfbot.command.CommandRegistry;
 
-/**
- * Created by daporkchop on 05.03.17.
- */
-public class PorkListener extends ListenerAdapter {
+public abstract class CommandRegistry {
+	
+	/**
+	 * A HashMap containing all the commands and their prefix
+	 */
+	private static final HashMap<String, Command> COMMANDS = new HashMap<>();
 
-    @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
-        try {
-            if (!event.getAuthor().getId().equals(PorkSelfBot.INSTANCE.jda.getSelfUser().getId())) {
-                //only self user execute commands
-                return;
-            }
-        } catch (NullPointerException e)    {
-            //bot isn't fully initialized, ignore
-            return;
-        }
-
-        String message = event.getMessage().getRawContent();
-
-        if (message.startsWith(",,"))    {
-            CommandRegistry.runCommand(event, message);
-        }
-    }
+	/**
+	 * Registers a command to the command registry.
+	 * @param cmd
+	 * @return cmd again lul
+	 */
+	public static final Command registerCommand(Command cmd)	{
+		COMMANDS.put(cmd.prefix, cmd);
+		return cmd;
+	}
+	
+	/**
+	 * Runs a command
+	 * @param evt
+	 */
+	public static void runCommand(MessageReceivedEvent evt, String rawContent)	{
+		try {
+			String[] split = rawContent.split(" ");
+			Command cmd = COMMANDS.getOrDefault(split[0].substring(2), null);
+			if (cmd != null)	{
+				new Thread() {
+					@Override
+					public void run()	{
+						cmd.excecute(evt, split, rawContent);
+					}
+				}.start();
+			}
+		} catch (Exception e)	{
+			e.printStackTrace();
+			evt.getMessage().editMessage("Error running command: `" + evt.getMessage().getRawContent() + "`:\n`" + e.getClass().getCanonicalName() + "`").queue();
+		}
+	}
 }

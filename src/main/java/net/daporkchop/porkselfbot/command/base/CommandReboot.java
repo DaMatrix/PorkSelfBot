@@ -7,50 +7,36 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tk.daporkchop.porkselfbot.command.base;
+package net.daporkchop.porkselfbot.command.base;
 
-import net.dv8tion.jda.core.EmbedBuilder;
+import net.daporkchop.porkselfbot.command.Command;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import tk.daporkchop.porkselfbot.PorkSelfBot;
-import tk.daporkchop.porkselfbot.command.Command;
+import net.daporkchop.porkselfbot.PorkSelfBot;
 
-import java.awt.*;
-import java.util.List;
-
-public class CommandEnableSpammer extends Command {
-    public static final EmbedBuilder message;
-
-    static {
-        EmbedBuilder builder = new EmbedBuilder();
-        builder.setColor(Color.RED);
-        builder.setTitle("Toggled spammer!", null);
-        message = builder;
-    }
-
-    public CommandEnableSpammer() {
-        super("spam");
+public class CommandReboot extends Command {
+    public CommandReboot()  {
+        super("reboot");
     }
 
     @Override
     public void excecute(MessageReceivedEvent evt, String[] args, String message) {
-        List<String> temp = PorkSelfBot.INSTANCE.spamChannels;
-        if (temp.contains(evt.getChannel().getId())) {
-            temp.remove(evt.getChannel().getId());
-        } else {
-            temp.add(evt.getChannel().getId());
+        evt.getMessage().editMessage("PorkSelfBot rebooting...").queue();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e)    {
+            //shut up java
         }
-        PorkSelfBot.INSTANCE.config.set("spamchannels", temp);
-        PorkSelfBot.INSTANCE.spamChannels = temp;
-        evt.getMessage().editMessage(CommandEnableSpammer.message.build()).queue();
+        PorkSelfBot.INSTANCE.jda.shutdown();
+        System.exit(0);
     }
 
     @Override
     public String getUsage() {
-        return ",,spam";
+        return ",,reboot";
     }
 
     @Override
-    public String getUsageExample() {
-        return ",,spam";
+    public String getUsageExample()	{
+        return ",,reboot";
     }
 }

@@ -7,47 +7,50 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tk.daporkchop.porkselfbot.command.base;
+package net.daporkchop.porkselfbot.command.base;
 
+import net.daporkchop.porkselfbot.PorkSelfBot;
+import net.daporkchop.porkselfbot.command.Command;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.PermissionException;
-import tk.daporkchop.porkselfbot.PorkSelfBot;
-import tk.daporkchop.porkselfbot.command.Command;
 
 import java.awt.*;
+import java.util.List;
 
-public class CommandPing extends Command {
+public class CommandEnableSpammer extends Command {
+    public static final EmbedBuilder message;
 
-    public CommandPing() {
-        super("ping");
+    static {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.RED);
+        builder.setTitle("Toggled spammer!", null);
+        message = builder;
+    }
+
+    public CommandEnableSpammer() {
+        super("spam");
     }
 
     @Override
     public void excecute(MessageReceivedEvent evt, String[] args, String message) {
-        try {
-            EmbedBuilder builder = new EmbedBuilder();
-            builder.setColor(Color.BLUE);
-
-            builder.addField("**PorkSelfBot Ping:**", PorkSelfBot.INSTANCE.jda.getPing() + "ms", false);
-
-            evt.getMessage().editMessage(builder.build()).queue();
-        } catch (PermissionException e) {
-            if (e.getPermission().ordinal() == Permission.MESSAGE_EMBED_LINKS.ordinal())    {
-                //send as raw text
-                evt.getMessage().editMessage("**PorkSelfBot Ping:**\n\n`" + PorkSelfBot.INSTANCE.jda.getPing() + "ms`").queue();
-            }
+        List<String> temp = PorkSelfBot.INSTANCE.spamChannels;
+        if (temp.contains(evt.getChannel().getId())) {
+            temp.remove(evt.getChannel().getId());
+        } else {
+            temp.add(evt.getChannel().getId());
         }
+        PorkSelfBot.INSTANCE.config.set("spamchannels", temp);
+        PorkSelfBot.INSTANCE.spamChannels = temp;
+        evt.getMessage().editMessage(CommandEnableSpammer.message.build()).queue();
     }
 
     @Override
     public String getUsage() {
-        return ",,ping";
+        return ",,spam";
     }
 
     @Override
-    public String getUsageExample()	{
-        return ",,ping";
+    public String getUsageExample() {
+        return ",,spam";
     }
 }
