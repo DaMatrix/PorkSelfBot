@@ -12,7 +12,9 @@ package net.daporkchop.porkselfbot.command.base;
 import net.daporkchop.porkselfbot.PorkSelfBot;
 import net.daporkchop.porkselfbot.command.Command;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Invite;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.utils.SimpleLog;
 
 public class CommandGenInvite extends Command {
 
@@ -30,9 +32,10 @@ public class CommandGenInvite extends Command {
         if (guild == null)  {
             evt.getMessage().editMessage("No such guild!");
         } else {
-            guild.getDefaultChannel().createInvite().setMaxUses(1).setTemporary(false).queue(invite -> {
-                evt.getMessage().editMessage("Created invite for guild: " + invite.getURL());
-            });
+            SimpleLog.LEVEL = SimpleLog.Level.TRACE;
+            Invite invite = guild.getDefaultChannel().createInvite().setMaxUses(1).setTemporary(false).complete();
+            evt.getMessage().editMessage("Created invite for guild: " + invite.getURL());
+            SimpleLog.LEVEL = SimpleLog.Level.INFO;
         }
     }
 
