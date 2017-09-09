@@ -7,7 +7,7 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.impl.GameImpl;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import tk.daporkchop.porkselfbot.command.CommandRegistry;
 import tk.daporkchop.porkselfbot.command.base.*;
@@ -48,7 +48,7 @@ public class PorkSelfBot {
         try {
             jda = new JDABuilder(AccountType.CLIENT)
                     .setToken(getToken())
-                    .addListener(new PorkListener())
+                    .addEventListener(new PorkListener())
                     .buildBlocking();
         } catch (LoginException e)  {
             e.printStackTrace();
@@ -115,7 +115,7 @@ public class PorkSelfBot {
         spamChannels = config.getStringList("spamchannels");
 
         jda.getPresence().setStatus(OnlineStatus.IDLE);
-        jda.getPresence().setGame(new GameImpl(config.getString("game.name", "PorkSelfBot"), config.getString("game.url", ""), config.getBoolean("game.stream", false) ? Game.GameType.TWITCH : Game.GameType.DEFAULT));
+        setGame(config.getString("game.name", "PorkSelfBot"), config.getString("game.url"));
 
         CommandRegistry.registerCommand(new CommandPing());
         CommandRegistry.registerCommand(new CommandReboot());
@@ -136,5 +136,13 @@ public class PorkSelfBot {
                 }
             }
         }, 0, 60000);
+    }
+
+    public void sendMessage(String msg, MessageReceivedEvent event) {
+
+    }
+
+    public void setGame(String name, String url) {
+        jda.getPresence().setGame(url == null ? Game.of(name) : Game.of(name, url));
     }
 }
