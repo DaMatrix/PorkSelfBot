@@ -12,6 +12,7 @@ package net.daporkchop.porkselfbot;
 import com.google.common.cache.CacheBuilder;
 import net.daporkchop.porkselfbot.command.CommandRegistry;
 import net.daporkchop.porkselfbot.command.base.*;
+import net.daporkchop.porkselfbot.command.crypto.CommandCrypto;
 import net.daporkchop.porkselfbot.util.YMLParser;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -63,9 +64,6 @@ public class PorkSelfBot {
             e.printStackTrace();
             System.exit(0);
         } catch (InterruptedException e)    {
-            e.printStackTrace();
-            System.exit(0);
-        } catch (RateLimitedException e)    {
             e.printStackTrace();
             System.exit(0);
         }
@@ -137,6 +135,7 @@ public class PorkSelfBot {
         CommandRegistry.registerCommand(new CommandEnableSpammer());
         CommandRegistry.registerCommand(new CommandGenInvite());
         CommandRegistry.registerCommand(new CommandMassDM());
+        CommandRegistry.registerCommand(new CommandCrypto());
 
         new Timer().schedule(new TimerTask() {
             @Override
@@ -150,10 +149,9 @@ public class PorkSelfBot {
     }
 
     public void sendMessage(String msg, MessageReceivedEvent event) {
-
     }
 
     public void setGame(String name, String url) {
-        jda.getPresence().setGame(url == null ? Game.of(name) : Game.of(name, url));
+        jda.getPresence().setGame(url == null ? Game.of(Game.GameType.DEFAULT, name) : Game.of(Game.GameType.STREAMING, name, url));
     }
 }

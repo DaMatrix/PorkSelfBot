@@ -48,7 +48,7 @@ public abstract class CommandRegistry {
 			}
 		} catch (Exception e)	{
 			e.printStackTrace();
-			evt.getMessage().editMessage("Error running command: `" + evt.getMessage().getRawContent() + "`:\n`" + e.getClass().getCanonicalName() + "`").queue();
+			evt.getMessage().editMessage("Error running command: `" + evt.getMessage().getContentRaw() + "`:\n`" + e.getClass().getCanonicalName() + "`").queue();
 		}
 	}
 }

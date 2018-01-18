@@ -30,7 +30,7 @@ public class PorkListener extends ListenerAdapter {
             return;
         }
 
-        String message = event.getMessage().getRawContent();
+        String message = event.getMessage().getContentRaw();
 
         if (message.startsWith(",,"))    {
             CommandRegistry.runCommand(event, message);

@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>3.3.0_262</version>
+			<version>3.5.0_328</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

@@ -14,7 +14,6 @@ import net.daporkchop.porkselfbot.command.Command;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Invite;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.utils.SimpleLog;
 
 public class CommandGenInvite extends Command {
 
@@ -24,18 +23,16 @@ public class CommandGenInvite extends Command {
 
     @Override
     public void excecute(MessageReceivedEvent evt, String[] args, String message) {
-        if (args.length < 2)    {
+        if (args.length < 2) {
             evt.getMessage().editMessage("Server ID needed!").queue();
         }
         long id = Long.parseLong(args[1]);
         Guild guild = PorkSelfBot.INSTANCE.jda.getGuildById(id);
-        if (guild == null)  {
+        if (guild == null) {
             evt.getMessage().editMessage("No such guild!");
         } else {
-            SimpleLog.LEVEL = SimpleLog.Level.TRACE;
             Invite invite = guild.getDefaultChannel().createInvite().setMaxUses(1).setTemporary(false).complete();
             evt.getMessage().editMessage("Created invite for guild: " + invite.getURL()).queue();
-            SimpleLog.LEVEL = SimpleLog.Level.INFO;
         }
     }
 
@@ -45,7 +42,7 @@ public class CommandGenInvite extends Command {
     }
 
     @Override
-    public String getUsageExample()	{
+    public String getUsageExample() {
         return ",,geninvite";
     }
 }
