@@ -94,7 +94,9 @@ public class CommandEmbed extends Command {
                 builder.setImage(image);
             }
 
-            evt.getMessage().editMessage(builder.build()).queue();
+            evt.getMessage().delete().queue();
+            evt.getChannel().sendMessage(builder.build()).queue();
+            //evt.getMessage().editMessage(builder.build()).queue();
         } catch (PermissionException e) {
             if (e.getPermission().ordinal() == Permission.MESSAGE_EMBED_LINKS.ordinal())    {
                 evt.getMessage().editMessage("*Missing permission to send embeds!*").queue();
